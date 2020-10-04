@@ -9,7 +9,10 @@ class to_do():
 
 
 	def build_task_out(self):
-		self.out = '<b>' + self.title + '\n—</b>' + self.text
+		if self.text:
+			self.out = '<b>' + self.title + '\n—</b>' + self.text
+		else:
+			self.out = self.out = '<b>' + self.title + '</b>'
 
 class user():
 
