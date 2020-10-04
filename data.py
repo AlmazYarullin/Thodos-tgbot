@@ -23,5 +23,4 @@ class task_callback():
 	def __init__(self, status, t_idx, u_idx):
 		self.status = status
 		self.index = t_idx
-		self.user_id = u_idx
 
