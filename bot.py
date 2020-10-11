@@ -7,7 +7,7 @@ from telebot import types
 from task import Button
 
 
-def show_main_keyboard(items):
+def show_main_keyboard(items=):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     item1 = types.KeyboardButton("Новый туду")
     item2 = types.KeyboardButton("Мои туду")
@@ -34,7 +34,7 @@ def send_welcome(message):
                              "не забыть про твои дела.", reply_markup=show_main_keyboard(0))
     if message.text.find('/makead') != -1 and message.from_user.id == 587925968:
         for user_id in Data().get_user_ids():
-            bot.send_message(user_id[0], "📣❗️Обновление❗️📒" + message.text[7::], reply_markup=show_main_keyboard())
+            bot.send_message(user_id[0], "📣❗️Обновление❗️📒" + message.text[7::], reply_markup=show_main_keyboard(0))
     if message.text == '/delete_account':
         Data().delete_user(message.from_user.id)
         bot.send_message(message.chat.id, "Пока 😥", reply_markup=types.ReplyKeyboardRemove())
