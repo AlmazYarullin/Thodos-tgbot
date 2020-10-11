@@ -7,7 +7,7 @@ from telebot import types
 from task import Button
 
 
-def show_main_keyboard(items=):
+def show_main_keyboard(items):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     item1 = types.KeyboardButton("Новый туду")
     item2 = types.KeyboardButton("Мои туду")
