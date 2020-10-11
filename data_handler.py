@@ -108,3 +108,15 @@ class Data:
         with sql.connect("users_data.db") as connection:
             cursor = connection.cursor()
             cursor.execute("UPDATE tasks SET active = 0 WHERE user_id = (?) AND task_id = (?)", (user_id, task_id))
+
+    def get_user_ids(self):
+        with sql.connect("users_data.db") as connection:
+            cursor = connection.cursor()
+            cursor.execute("SELECT user_id FROM users")
+            return cursor.fetchall()
+
+    def delete_user(self, user_id):
+        with sql.connect("users_data.db") as connection:
+            cursor = connection.cursor()
+            cursor.execute("DELETE FROM users WHERE user_id = (?)", tuple([user_id]))
+            cursor.execute("DELETE FROM tasks WHERE user_id = (?)", tuple([user_id]))
