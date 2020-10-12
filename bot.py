@@ -42,8 +42,6 @@ def send_welcome(message):
 
 @bot.message_handler(content_types=['text'])
 def mes(message):
-    # bot.send_message(message.chat.id, '🏗Проводятся технические работы👷')
-    # return
     if not Data().is_registered(message.from_user.id):
         bot.send_message(message.from_user.id, "🚫Для начала, зарегистрируйся🚫\nНапиши /start")
         return
@@ -124,12 +122,6 @@ def callback_inline(call):
         if call.message:
             button = Button(b_type=call.data.split('_<>_')[3])
             button.convert_to_button(call.data)
-            # print('===========================')
-            # print('button.type =', button.type)
-            # print('button.status =', button.status)
-            # print('button.action =', button.action)
-            # print('button.task_id =', button.task_id)
-            # Кнопка связана с выведенными туду
             if button.type == 'simple':
                 if button.status == 'showing_tasks':
                     task = Data().get_task(call.from_user.id, button.task_id)
@@ -156,7 +148,8 @@ def callback_inline(call):
                         button.type = 'parameter'
                         button.parameter.values = ['rewrite', 'add']
                         markup = types.InlineKeyboardMarkup(row_width=2)
-                        item = types.InlineKeyboardButton("Параметр: Перезаписать", callback_data=button.convert_to_string())
+                        item = types.InlineKeyboardButton("Параметр: Перезаписать",
+                                                          callback_data=button.convert_to_string())
                         markup.add(item)
                         bot.send_message(call.message.chat.id,
                                          "👇 Твое туду",
