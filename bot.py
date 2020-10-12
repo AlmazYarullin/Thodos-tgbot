@@ -85,6 +85,7 @@ def mes(message):
                                           "молоко, хлеб, бананы", reply_markup=markup)
     # Вывод существующих туду
     elif message.text == 'Мои туду':
+        print('here')
         if not Data().tasks_exist(user.id):
             bot.send_message(message.chat.id, 'У тебя нет ни одного туду', reply_markup=show_main_keyboard(0))
         else:
