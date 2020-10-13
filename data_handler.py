@@ -23,11 +23,13 @@ class Data:
                             )""")
 
     def register_user(self, user_id, username):
+        """регистрация пользователя"""
         with sql.connect("users_data.db") as connection:
             cursor = connection.cursor()
             cursor.execute("INSERT INTO users (user_id, username) VALUES(?, ?)", (user_id, username))
 
     def is_registered(self, user_id):
+        """проверка на наличие пользователя"""
         with sql.connect("users_data.db") as connection:
             cursor = connection.cursor()
             cursor.execute("SELECT user_id FROM users WHERE user_id = (?)", tuple([user_id]))
@@ -38,6 +40,7 @@ class Data:
                 return False
 
     def create_task(self, user_id, task):
+        """Запись task в users_data"""
         with sql.connect("users_data.db") as connection:
             cursor = connection.cursor()
             cursor.execute("SELECT task_id FROM tasks WHERE user_id = (?) ORDER BY task_id", tuple([user_id]))
@@ -51,12 +54,14 @@ class Data:
                            (user_id, task_id, task.title, task.text, task.out))
 
     def update_task(self, user_id, task):
+        """Изменение task в users_data"""
         with sql.connect("users_data.db") as connection:
             cursor = connection.cursor()
             cursor.execute("UPDATE tasks SET title = (?), text = (?), out = (?), active = (?) WHERE user_id = (?) AND "
                            "task_id = (?)", (task.title, task.text, task.out, task.active, user_id, task.id))
 
     def get_task(self, user_id, task_id):
+        """Запрос task из users_data"""
         task = To_do()
         task.id = task_id
         with sql.connect("users_data.db") as connection:
@@ -76,20 +81,25 @@ class Data:
         return task
 
     def bot_status(self, user_id, status=''):
+        """Запрос или изменение статуса бота для пользователя"""
         with sql.connect("users_data.db") as connection:
             cursor = connection.cursor()
             if status:
+                # Изменение статуса бота
                 cursor.execute("UPDATE users SET bot_status = (?) WHERE user_id = (?)", (status, user_id))
             else:
+                # Запрос статуса бота
                 cursor.execute("SELECT bot_status FROM users WHERE user_id = (?)", tuple([user_id]))
                 return cursor.fetchone()[0]
 
     def delete_task(self, user_id, task_id):
+        """Удаление task из users_data"""
         with sql.connect("users_data.db") as connection:
             cursor = connection.cursor()
             cursor.execute("DELETE FROM tasks WHERE user_id = (?) AND task_id = (?)", (user_id, task_id))
 
     def tasks_exist(self, user_id):
+        """Проверка на наличие хотя бы одного task у пользователя"""
         with sql.connect("users_data.db") as connection:
             cursor = connection.cursor()
             cursor.execute("SELECT * FROM tasks WHERE user_id = (?)", tuple([user_id]))
@@ -99,23 +109,27 @@ class Data:
                 return False
 
     def get_index_of_the_last_task(self, user_id):
+        """Запрос индекса последнего task у пользователя"""
         with sql.connect("users_data.db") as connection:
             cursor = connection.cursor()
             cursor.execute("SELECT max(task_id) FROM tasks WHERE user_id = (?)", tuple([user_id]))
             return cursor.fetchone()[0]
 
     def task_done(self, user_id, task_id):
+        """Изменение task на сделано (active = False)"""
         with sql.connect("users_data.db") as connection:
             cursor = connection.cursor()
             cursor.execute("UPDATE tasks SET active = 0 WHERE user_id = (?) AND task_id = (?)", (user_id, task_id))
 
     def get_user_ids(self):
+        """Запрос id всех пользователей"""
         with sql.connect("users_data.db") as connection:
             cursor = connection.cursor()
             cursor.execute("SELECT user_id FROM users")
             return cursor.fetchall()
 
     def delete_user(self, user_id):
+        """Удаление пользователя"""
         with sql.connect("users_data.db") as connection:
             cursor = connection.cursor()
             cursor.execute("DELETE FROM users WHERE user_id = (?)", tuple([user_id]))
