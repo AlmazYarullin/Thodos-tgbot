@@ -22,26 +22,21 @@ def show_main_keyboard(items):
 bot = telebot.TeleBot(config.TOKEN)
 
 
-@bot.message_handler(commands=['start', 'help', 'makead', 'delete_account'])
+@bot.message_handler(commands=['start', 'help', 'delete_account'])
 def send_welcome(message):
-    """Приветствие"""
     if message.text == '/start':
         if not Data().is_registered(message.from_user.id):
             Data().register_user(message.from_user.id, message.from_user.username)
-            bot.send_message(message.chat.id,
-                             "Привет, я Тодос - бот и твой личный ассистент!\n"
-                             "Я помогу тебе не выбиться из графика и "
-                             "не забыть про твои дела.", reply_markup=show_main_keyboard(0))
-    if message.text.find('/makead') != -1 and message.from_user.id == 587925968:
-        for user_id in Data().get_user_ids():
-            bot.send_message(user_id[0], "📣❗️Обновление❗️📒" + message.text[7::], reply_markup=show_main_keyboard(0))
+            bot.send_message(message.chat.id, config.HELLO_MESSAGE, reply_markup=show_main_keyboard(0))
     if message.text == '/delete_account':
+        # Удаление аккаунта
         Data().delete_user(message.from_user.id)
         bot.send_message(message.chat.id, "Пока 😥", reply_markup=types.ReplyKeyboardRemove())
 
 
 @bot.message_handler(content_types=['text'])
 def mes(message):
+    # Проверка регистрации пользователя
     if not Data().is_registered(message.from_user.id):
         bot.send_message(message.from_user.id, "🚫Для начала, зарегистрируйся🚫\nНапиши /start")
         return
@@ -172,7 +167,7 @@ def callback_inline(call):
                                                   reply_markup=button.build_parameter_button())
                     Data().bot_status(call.from_user.id, button.convert_to_string())
     except Exception as e:
-        bot.send_message(587925968, repr(e))
+        print(repr(e))
 
 
 bot.polling()
