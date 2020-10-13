@@ -1,50 +1,33 @@
 # Thodos
 
-## About
-Тодос - телеграм бот, способный запоминать
+## О программе
+Тодос - телеграм бот, запоминающий задачи пользователя. Он способен создавать, изменять, удалять 
 
-You can create your own bot for your discord server with using instructions below or add existing one by clicking on link:
-https://discord.com/oauth2/authorize?client_id=765299001356058624&permissions=8&scope=bot
+Чтобы воспользоываться ботом, перейдите по следующий ссылке https://t.me/pumpkabot
 
-## Setup
-### Installation
-1. Clone repo with using `git clone https://gitlab.com/lllumineux/jobs-97-bot.git`
-2. Use `pip install -r requirements.txt` to install dependencies
-### Configuration
-You have to create `.env` file in the root of the project and put there your tokens as shown in the example below:
-```
-DISCORD_TOKEN= *discord bot api token*
-DISCORD_CLIENT_ID= *discord bot client id*
-DISCORD_PERMISSIONS= *discord bot permission number*
-DISCORD_SCOPE= *discord bot scope attribute*
+## Установка
+### Скачивание
+1. Склонируйте репозиторий с помощью команды `git clone https://github.com/Pumpka-s/TelegramBot.git`
+2. Используйте `pip install -r requirements.txt` для установки необходимых библиотек
+### Запуск
+1. Введите команду `python bot.py` находясь в корне репозитория
 
-DB_NAME= *mongoDB db name*
-DB_USER_NAME= *mongoDB db user name*
-DB_USER_PASSWORD= *mongoDB db user password*
-```
-Also, you can change bot's command prefix, messages color, channels names, etc. in *config.py*
-### Launching
-1. Write `python -m jobs_97_bot` command from the root of the repository to run the bot
+## Работа с ботом
+### Регистрация
+Для начала работы с ботом, нажмите "Start", после бот зарегистрирует вас и вы можете мользоваться всеми его функциями.
 
-## Game process
-### General concept of the game
-The game is intended to recreate the atmosphere that reigned in the late 90s at Apple, when Steve Jobs returned there, previously exiled for not doing his job well. The players are members of the board of directors, in whose hands the fate of the whole company.
+### Создание туду
+Чтобы создать туду, нажмите на "Новый туду", после чего бот отправит вам инструкцию по созданию:
+В первой строке введите название вашего туду.
+Во второй, и далее - описание
 
-At the beginning of the game, each player gets a role: a supporter of Steve Jobs, his opponent or Steve Jobs himself. There are always more opponents, but they do not know which player is who. On the contrary, there are fewer supporters, but they are familiar both with each other and with Steve Jobs (he is with them too).
+### Просмотр туду
+Чтобы просмотреть туду, нажмите на "Мои туду", после чего бот отправит вам ваши туду, если они у вас есть.
 
-The only way for opponents to win is to collect 5 cards in their piggy bank, while supporters have two options to win: they can either collect 6 cards, or put Steve Jobs in the post of CEO, having typed at least 3 cards.
+### Изменение туду
+Чтобы изменить туду, удалить или пометить сделанным, нажмите на "Мои туду", далее под нужным туду нажмите "Изменить", выберите параметр: "Перезаписать" или "Добавить" и введите текст
+Параметр "Перезаписать" полностью заменяет ваше туду на тот, который вы введете.
+Параметр "Добавить" добавит введенный текст в конец описания.
 
-<img alt="Card combination example" src="/jobs_97_bot/img/card_combinations/oos.png" width="300">
-
-### Objectives of the game
-Opponents must find out who belongs to which team and prevent supporters from winning. In turn, the goal of the supporters is to win, outwitting the opponents and not allowing themselves to be declassified.
-
-### Game progress
-The whole game consists of rounds, divided into two main stages:
-
-First, the vice president, whose position is transferred to the players in turn, nominates a candidate for the post of CEO. If the majority of players agree with the candidacy, the proposed player takes the position. If not, the round starts over, and the VP is transferred to the next player.
-
-If the elections were successful, a set of three cards appears in the vice president's personal messages. He is asked to exclude one of them, thereby leaving only two in the set. The remaining cards are sent to the CEO. He also excludes one card. The last remaining card is shown to all players. If the card says that it belongs to supporters, then the point goes to their piggy bank, if to opponents, then they get the point, respectively.
-
-### End of the game
-The game lasts until one of the teams fulfills the conditions necessary to win.
+### Удаление аккаунта
+Чтобы удалить аккаунт, введите команду `/delete_account`, после этого все ваши туду, и аккаунт будет удален без возможности восстановления.
