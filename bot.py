@@ -169,8 +169,9 @@ def callback_inline(call):
                         item3 = types.InlineKeyboardButton("✏ Изменить", callback_data=button.convert_to_string())
                         markup.add(item1, item2, item3)
                         Data().change_task_activity(call.from_user.id, button.task_id, True)
-                        bot.edit_message_reply_markup(call.from_user.id, message_id=call.message.message_id,
-                                                      reply_markup=markup)
+                        bot.edit_message_text(Data().get_task(call.from_user.id, button.task_id).out,
+                                              chat_id=call.from_user.id, message_id=call.message.message_id,
+                                              reply_markup=markup, parse_mode='html')
                 # Кнопка связана с отменой создания туду
                 elif button.status == 'creating_to_do':
                     if button.action == 'cancel' and Data().bot_status(call.from_user.id) == 'creating_to_do':
