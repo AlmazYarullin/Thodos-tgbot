@@ -3,11 +3,11 @@ from telebot import types
 
 class Button:
 
-    def __init__(self, status='', b_type='simple', action='', task_id=-1):
+    def __init__(self, status='', button_type='simple', action='', task_id=-1):
         self.status = status
         self.action = action
         self.task_id = task_id
-        self.type = b_type
+        self.type = button_type
         self.parameter = Parameter()
 
     def convert_to_string(self):

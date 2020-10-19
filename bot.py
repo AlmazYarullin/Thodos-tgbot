@@ -36,6 +36,9 @@ def send_welcome(message):
 
 @bot.message_handler(content_types=['text'])
 def mes(message):
+    # if message.from_user.id != 587925968:
+    #     bot.send_message(message.from_user.id, "🏗Ведутся технические работы👷")
+    #     return
     # Проверка регистрации пользователя
     if not Data().is_registered(message.from_user.id):
         bot.send_message(message.from_user.id, "🚫Для начала, зарегистрируйся🚫\nНапиши /start")
@@ -54,7 +57,7 @@ def mes(message):
     # Обработка с параметром
     elif len(user.bot_status.split('_<>_')) > 4:
         task = To_do()
-        button = Button(b_type='parameter')
+        button = Button(button_type='parameter')
         button.convert_to_button(user.bot_status)
         if button.parameter.values[button.parameter.now] == 'add':
             task = Data().get_task(user.id, int(button.task_id))
@@ -103,11 +106,12 @@ def mes(message):
 
                     bot.send_message(message.chat.id, task.out, reply_markup=markup, parse_mode='html')
                 else:
-                    button = Button('showing_tasks', action='delete', task_id=task.id)
                     markup = types.InlineKeyboardMarkup(row_width=2)
-                    item1 = types.InlineKeyboardButton("❌ Удалить",
-                                                       callback_data=button.convert_to_string())
-                    markup.add(item1)
+                    button = Button('showing_tasks', action='backup', task_id=task.id)
+                    item1 = types.InlineKeyboardButton("🔙 Вернуть", callback_data=button.convert_to_string())
+                    button.action = "delete"
+                    item2 = types.InlineKeyboardButton("❌ Удалить", callback_data=button.convert_to_string())
+                    markup.add(item1, item2)
                     bot.send_message(message.chat.id, "🟢 " + task.title, reply_markup=markup, parse_mode='html')
 
 
@@ -115,7 +119,7 @@ def mes(message):
 def callback_inline(call):
     try:
         if call.message:
-            button = Button(b_type=call.data.split('_<>_')[3])
+            button = Button(button_type=call.data.split('_<>_')[3])
             button.convert_to_button(call.data)
             if button.type == 'simple':
                 if button.status == 'showing_tasks':
@@ -124,12 +128,14 @@ def callback_inline(call):
                         return
                     # Активация кнопки "Сделано"
                     if button.action == 'done':
-                        Data().task_done(call.from_user.id, task.id)
+                        Data().change_task_activity(call.from_user.id, task.id, False)
                         markup = types.InlineKeyboardMarkup(row_width=2)
+                        button.action = 'backup'
+                        item1 = types.InlineKeyboardButton("🔙 Вернуть", callback_data=button.convert_to_string())
                         button.action = 'delete'
-                        item1 = types.InlineKeyboardButton("❌ Удалить",
+                        item2 = types.InlineKeyboardButton("❌ Удалить",
                                                            callback_data=button.convert_to_string())
-                        markup.add(item1)
+                        markup.add(item1, item2)
                         bot.edit_message_text(chat_id=call.message.chat.id,
                                               message_id=call.message.message_id, reply_markup=markup,
                                               text="🟢 " + task.title, parse_mode='html')
@@ -152,6 +158,19 @@ def callback_inline(call):
                         bot.send_message(call.message.chat.id,
                                          task.title + task.text, reply_markup=markup)
                         Data().bot_status(call.from_user.id, button.convert_to_string())
+                    # Возвращение туду в активные
+                    elif button.action == "backup":
+                        markup = types.InlineKeyboardMarkup(row_width=2)
+                        button.action = 'done'
+                        item1 = types.InlineKeyboardButton("✅ Сделано", callback_data=button.convert_to_string())
+                        button.action = 'delete'
+                        item2 = types.InlineKeyboardButton("❌ Удалить", callback_data=button.convert_to_string())
+                        button.action = 'edit'
+                        item3 = types.InlineKeyboardButton("✏ Изменить", callback_data=button.convert_to_string())
+                        markup.add(item1, item2, item3)
+                        Data().change_task_activity(call.from_user.id, button.task_id, True)
+                        bot.edit_message_reply_markup(call.from_user.id, message_id=call.message.message_id,
+                                                      reply_markup=markup)
                 # Кнопка связана с отменой создания туду
                 elif button.status == 'creating_to_do':
                     if button.action == 'cancel' and Data().bot_status(call.from_user.id) == 'creating_to_do':

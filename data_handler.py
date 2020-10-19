@@ -115,11 +115,14 @@ class Data:
             cursor.execute("SELECT max(task_id) FROM tasks WHERE user_id = (?)", tuple([user_id]))
             return cursor.fetchone()[0]
 
-    def task_done(self, user_id, task_id):
+    def change_task_activity(self, user_id, task_id, do_active):
         """Изменение task на сделано (active = False)"""
         with sql.connect("users_data.db") as connection:
             cursor = connection.cursor()
-            cursor.execute("UPDATE tasks SET active = 0 WHERE user_id = (?) AND task_id = (?)", (user_id, task_id))
+            if do_active:
+                cursor.execute("UPDATE tasks SET active = 1 WHERE user_id = (?) AND task_id = (?)", (user_id, task_id))
+            else:
+                cursor.execute("UPDATE tasks SET active = 0 WHERE user_id = (?) AND task_id = (?)", (user_id, task_id))
 
     def get_user_ids(self):
         """Запрос id всех пользователей"""
