@@ -1,3 +1,3 @@
-TOKEN = '1258654743:AAEY9wuew4JeTHbNwtyncYjP-GoqSvxzL5w'
+TOKEN = '1331964006:AAHKNkdeeltfPxRyvAAHeN4F4P9b8jcCyP8'
 HELLO_MESSAGE = "Привет, я Тодос - бот и твой личный ассистент!\n"\
                 "Я помогу тебе не выбиться из графика и не забыть про твои дела."
